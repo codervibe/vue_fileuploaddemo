@@ -1,4 +1,4 @@
-<template>
+<template v-slot:tip>
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
@@ -8,9 +8,12 @@
     </p>
     <h3>Installed CLI Plugins</h3>
     <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank"
+             rel="noopener">babel</a></li>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank"
+             rel="noopener">router</a></li>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank"
+             rel="noopener">eslint</a></li>
     </ul>
     <h3>Essential Links</h3>
     <ul>
@@ -24,13 +27,20 @@
     <ul>
       <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
       <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
+      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a>
+      </li>
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
-    <hr>
-    <input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update"/>
-
+    <!--    <hr>-->
+    <div class="UploadFile" style="border:solid blue 1px;">
+      <el-upload class="upload-demo" action="http://127.0.0.1:14852/file/uploadandownload" :on-preview="upload"
+                 accept=".jpg" :limit="10">
+        <!--   回调函数-->
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+    </div>
 
 
   </div>
@@ -42,21 +52,12 @@ export default {
   props: {
     msg: String
   },
-  methods:{
-    update(e){
-      let file = e.target.files[0];
-      let param = new FormData(); //创建form对象
-      param.append('file',file);//通过append向form对象添加数据
-      console.log(param.get('file')); //FormData私有类对象，访问不到，通过get判断值是否传进去
-      //设置请求头
-      let config = {
-        headers:{'Content-Type':'multipart/form-data'}
-      };
-      this.$http.post('http://127.0.0.1:14852/SpringbootFileUploadDemo/file/upload',param,config)
-          .then(response=>{
-            alert("发送请求回弹");
-            console.log(response.data);
-          })
+  methods: {
+    upload(file) {
+      alert("文件上传.........");
+      alert(file.response.url);
+      const url = file.response.url;
+      window.open(url);
     }
 
   }
@@ -68,14 +69,17 @@ export default {
 h3 {
   margin: 40px 0 0;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
 }
